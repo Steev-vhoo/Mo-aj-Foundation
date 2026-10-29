@@ -3,6 +3,8 @@ title: "Remembering Junior: why this foundation exists"
 person: Mark Ofosu-Ampadu Jnr
 summary: "On 25 January 2020, a road traffic accident took Mark from us. His family tells his story, and why they chose to turn grief into a stand for safer roads."
 date: 2026-10-29
+image: ../../assets/gallery/05-wearing-the-mo-aj-foundation-colours.jpg
+imageAlt: "A supporter wearing a MO-AJ Foundation T-shirt printed with Mark's portrait"
 consentOnFile: true
 ---
 

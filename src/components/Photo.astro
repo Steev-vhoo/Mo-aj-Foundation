@@ -13,8 +13,10 @@ interface Props {
   ratio?: string;
   class?: string;
   eager?: boolean;
+  /** CSS object-position, to keep faces in frame when cropping */
+  position?: string;
 }
-const { src, alt = '', label = 'Photo coming soon', ratio = '4 / 3', class: cls, eager = false } = Astro.props;
+const { src, alt = '', label = 'Photo coming soon', ratio = '4 / 3', class: cls, eager = false, position = 'center' } = Astro.props;
 ---
 
 {
@@ -23,7 +25,7 @@ const { src, alt = '', label = 'Photo coming soon', ratio = '4 / 3', class: cls,
       src={src}
       alt={alt}
       class:list={['photo', cls]}
-      style={`aspect-ratio:${ratio}`}
+      style={`aspect-ratio:${ratio};object-position:${position}`}
       widths={[400, 800, 1200]}
       sizes="(max-width: 900px) 100vw, 50vw"
       loading={eager ? 'eager' : 'lazy'}

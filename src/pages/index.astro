@@ -5,6 +5,8 @@ import EntryCard from '../components/EntryCard.astro';
 import CtaBand from '../components/CtaBand.astro';
 import SocialFeed from '../components/SocialFeed.astro';
 import { getStories, getNews } from '../lib/content';
+import ribbonCutting from '../assets/gallery/01-ribbon-cutting-at-the-bus-shelter-unveiling.jpg';
+import busShelter from '../assets/gallery/03-the-mo-aj-foundation-bus-shelter.jpg';
 
 const stories = (await getStories()).slice(0, 3);
 const news = (await getNews()).slice(0, 3);
@@ -45,7 +47,13 @@ const pillars = [
         </div>
       </div>
       <div class="hero-media">
-        <Photo label="Hero photo: Mark, or a foundation event / community outreach" ratio="4 / 5" eager />
+        <Photo
+          src={ribbonCutting}
+          alt="Family and supporters cut the ribbon at the unveiling of the MO-AJ Foundation bus shelter"
+          ratio="4 / 5"
+          position="62% center"
+          eager
+        />
         <div class="hero-quote">
           <p>"Our aim is to prevent others from suffering similar loss in their lives."</p>
           <span>The Ofosu-Ampadu family</span>
@@ -82,7 +90,12 @@ const pillars = [
 
   <section class="section section--tint">
     <div class="container split">
-      <Photo label="Photo of Mark Ofosu-Ampadu Jnr" ratio="1 / 1" />
+      <Photo
+        src={busShelter}
+        alt="Guests gather at the MO-AJ Foundation bus shelter, which carries Mark's portrait"
+        ratio="1 / 1"
+        position="38% center"
+      />
       <div>
         <p class="eyebrow">Our story</p>
         <h2>Remembering Junior</h2>

@@ -2,6 +2,8 @@
 title: "Welcome to the MO-AJ Foundation website"
 summary: "Our new home online, where we will share the stories of families affected by road crashes, our road safety work, and ways you can get involved."
 date: 2026-10-29
+image: ../../assets/gallery/04-friends-and-family-at-the-ceremony.jpg
+imageAlt: "Friends and family of the foundation gathered at a ceremony"
 ---
 
 We are glad to welcome you to the new website of the Mark Ofosu-Ampadu Jnr (MO-AJ) Foundation.

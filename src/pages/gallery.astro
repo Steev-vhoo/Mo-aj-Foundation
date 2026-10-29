@@ -6,14 +6,21 @@ import PageHeader from '../components/PageHeader.astro';
 import Photo from '../components/Photo.astro';
 import { site } from '../config';
 
-// Every image dropped into src/assets/gallery/ shows up here, newest file name last.
-// The file name becomes the caption: "road-safety-walk-accra-2026.jpg" → "Road safety walk accra 2026".
+// Every image dropped into src/assets/gallery/ shows up here, sorted by file name.
+// The file name becomes the caption, minus any leading number used for ordering:
+// "07-road-safety-walk-accra.jpg" → "Road safety walk accra".
 const files = import.meta.glob<{ default: ImageMetadata }>('../assets/gallery/*.{jpg,jpeg,png,webp,avif}', { eager: true });
 const photos = await Promise.all(
   Object.entries(files)
     .sort(([a], [b]) => a.localeCompare(b))
     .map(async ([path, mod]) => {
-      const name = path.split('/').pop()!.replace(/\.\w+$/, '').replace(/[-_]+/g, ' ');
+      const name = path
+        .split('/')
+        .pop()!
+        .replace(/\.\w+$/, '')
+        .replace(/^\d+[-_ ]*/, '')
+        .replace(/[-_]+/g, ' ')
+        .replace(/\bmo aj\b/gi, 'MO-AJ');
       const caption = name.charAt(0).toUpperCase() + name.slice(1);
       const large = await getImage({ src: mod.default, width: 1600 });
       return { src: mod.default, caption, large: large.src };
@@ -59,7 +66,7 @@ const photos = await Promise.all(
         <p class="eyebrow">Press & media</p>
         <h2>For journalists</h2>
         <p>
-          For interviews, comment on road safety in Ghana, or permission to use our photos, contact us at
+          For interviews, comment on road safety in Ghana, or permission to use our photos, contact us at{' '}
           <a href={`mailto:${site.email}`}>{site.email}</a>.
         </p>
         <a href="/images/logo.png" download class="btn btn--outline">Download our logo</a>
