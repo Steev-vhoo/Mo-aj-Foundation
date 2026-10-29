@@ -1,0 +1,166 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHeader from '../components/PageHeader.astro';
+import { donate, site } from '../config';
+
+const { paystackUrl, momo, bank, suggestedAmounts, currency } = donate;
+const hasMomo = Boolean(momo.number);
+const hasBank = Boolean(bank.accountNumber);
+---
+
+<Base title="Donate" description="Support the MO-AJ Foundation with a gift by Mobile Money or card.">
+  <PageHeader
+    eyebrow="Donate"
+    title="Your gift helps save lives on our roads"
+    lead="Every cedi supports families affected by road crashes and funds our campaigns for safer roads across Ghana."
+  />
+
+  <section class="section">
+    <div class="container donate-grid">
+      <div class="card main">
+        <h2>Give online</h2>
+        <p>Pay securely with <strong>Mobile Money</strong> (MTN, Telecel, AirtelTigo) or a <strong>bank card</strong>.</p>
+        <ul class="amounts" aria-label="Suggested amounts">
+          {suggestedAmounts.map((a) => <li>{currency}{a}</li>)}
+        </ul>
+        {
+          paystackUrl ? (
+            <a href={paystackUrl} class="btn btn--primary big" target="_blank" rel="noopener">
+              Donate now
+            </a>
+          ) : (
+            <>
+              <span class="btn btn--primary big" aria-disabled="true">Online giving coming soon</span>
+              <p class="notice">Setup: add the Paystack payment page link in <code>src/config.ts</code>.</p>
+            </>
+          )
+        }
+        <p class="small">Payments are processed by Paystack. We never see or store your card or MoMo PIN.</p>
+      </div>
+
+      <div class="side">
+        <div class="card">
+          <h2 class="h3">Mobile Money transfer</h2>
+          {
+            hasMomo ? (
+              <dl>
+                <dt>Network</dt><dd>{momo.network}</dd>
+                <dt>Number</dt><dd>{momo.number}</dd>
+                <dt>Name</dt><dd>{momo.accountName}</dd>
+              </dl>
+            ) : (
+              <p>Details coming soon. Email <a href={`mailto:${site.email}`}>{site.email}</a> in the meantime.</p>
+            )
+          }
+        </div>
+        <div class="card">
+          <h2 class="h3">Bank transfer</h2>
+          {
+            hasBank ? (
+              <dl>
+                <dt>Bank</dt><dd>{bank.bankName}</dd>
+                <dt>Account name</dt><dd>{bank.accountName}</dd>
+                <dt>Account number</dt><dd>{bank.accountNumber}</dd>
+                {bank.branch && <><dt>Branch</dt><dd>{bank.branch}</dd></>}
+              </dl>
+            ) : (
+              <p>Details coming soon. Email <a href={`mailto:${site.email}`}>{site.email}</a> in the meantime.</p>
+            )
+          }
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--tint">
+    <div class="container narrow">
+      <h2>Where your money goes</h2>
+      <p>Your gift supports our work to:</p>
+      <ul>
+        <li>support families who have lost loved ones in road crashes</li>
+        <li>run road safety awareness campaigns, events and community outreach</li>
+        <li>advocate for better road safety policy and infrastructure</li>
+        <li>celebrate Mark's ideals through education, entrepreneurship and leadership initiatives</li>
+      </ul>
+      <p>
+        Want to give as a company or organisation, or in another way? <a href="/contact">Get in touch</a> and we
+        will be glad to talk.
+      </p>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .donate-grid {
+    display: grid;
+    gap: 24px;
+  }
+  @media (min-width: 900px) {
+    .donate-grid {
+      grid-template-columns: 1.3fr 1fr;
+    }
+  }
+  .main {
+    border-top: 6px solid var(--red);
+  }
+  .side {
+    display: grid;
+    gap: 24px;
+  }
+  .h3 {
+    font-size: 1.3rem;
+  }
+  .amounts {
+    list-style: none;
+    padding: 0;
+    margin: 24px 0;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
+  @media (min-width: 520px) {
+    .amounts {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+  .amounts li {
+    text-align: center;
+    padding: 14px 8px;
+    border-radius: var(--radius-sm);
+    background: var(--navy-50);
+    color: var(--navy);
+    font-family: var(--font-head);
+    font-weight: 600;
+    font-size: 1.15rem;
+  }
+  .big {
+    width: 100%;
+    min-height: 56px;
+    font-size: 1.1rem;
+    margin-bottom: 16px;
+  }
+  .big[aria-disabled='true'] {
+    opacity: 0.55;
+    cursor: not-allowed;
+    transform: none;
+  }
+  .small {
+    font-size: 0.9rem;
+    color: var(--muted);
+    margin: 16px 0 0;
+  }
+  dl {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 6px 16px;
+    margin: 0;
+  }
+  dt {
+    color: var(--muted);
+  }
+  dd {
+    margin: 0;
+    font-weight: 600;
+    overflow-wrap: anywhere;
+  }
+</style>

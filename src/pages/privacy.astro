@@ -1,0 +1,49 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHeader from '../components/PageHeader.astro';
+import { site } from '../config';
+---
+
+<Base title="Privacy notice" description="How the MO-AJ Foundation handles your personal information.">
+  <PageHeader eyebrow="Privacy" title="Privacy notice" lead="How we collect, use and protect your personal information." />
+  <section class="section">
+    <div class="container narrow prose">
+      <p class="notice">Draft for the foundation to review before launch. This is not legal advice.</p>
+
+      <h2>Who we are</h2>
+      <p>
+        {site.fullName} ("we", "us") is responsible for personal information collected through this website. We
+        aim to handle it in line with Ghana's Data Protection Act, 2012 (Act 843).
+      </p>
+
+      <h2>What we collect</h2>
+      <p>
+        We collect only what you choose to give us through our forms: for example your name, email address,
+        phone number, location, volunteering interests and the content of your message or story.
+      </p>
+
+      <h2>How we use it</h2>
+      <ul>
+        <li>to reply to your message or enquiry</li>
+        <li>to contact you about volunteering opportunities you registered for</li>
+        <li>to follow up on a story you have offered to share. We never publish a story without written consent.</li>
+      </ul>
+      <p>We do not sell or rent your information, and we do not share it with anyone except the services we use to run this website and receive form submissions.</p>
+
+      <h2>Donations</h2>
+      <p>Online donations are processed by our payment provider, Paystack. We do not see or store your card details or Mobile Money PIN.</p>
+
+      <h2>How long we keep it</h2>
+      <p>We keep your information only as long as we need it for the purpose you gave it for, and then delete it.</p>
+
+      <h2>Your rights</h2>
+      <p>
+        You can ask to see, correct or delete the information we hold about you, or ask us to remove a published
+        story, at any time. Email <a href={`mailto:${site.email}`}>{site.email}</a>.
+      </p>
+
+      <h2>Cookies</h2>
+      <p>This website does not use advertising or tracking cookies. If you view our embedded social media feed, that provider may set its own cookies.</p>
+    </div>
+  </section>
+</Base>

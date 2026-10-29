@@ -1,0 +1,101 @@
+---
+import { site, nav } from '../config';
+import SocialLinks from './SocialLinks.astro';
+const year = new Date().getFullYear();
+---
+
+<footer class="site-footer">
+  <div class="container cols">
+    <div class="about">
+      <img src="/images/logo-white.png" alt="MO-AJ Foundation" width="440" height="223" loading="lazy" />
+      <p>{site.fullName}. In memory of Mark "Junior" Ofosu-Ampadu, working for safer roads in Ghana.</p>
+      <SocialLinks />
+    </div>
+    <div>
+      <h2 class="h">Explore</h2>
+      <ul>
+        {nav.map((item) => <li><a href={item.href}>{item.label}</a></li>)}
+      </ul>
+    </div>
+    <div>
+      <h2 class="h">Take action</h2>
+      <ul>
+        <li><a href="/donate">Donate</a></li>
+        <li><a href="/get-involved#volunteer">Volunteer</a></li>
+        <li><a href="/stories#share">Share a story</a></li>
+        <li><a href="/contact">Partner with us</a></li>
+      </ul>
+    </div>
+    <div>
+      <h2 class="h">Contact</h2>
+      <ul>
+        <li><a href={`mailto:${site.email}`}>{site.email}</a></li>
+        {site.phone && <li><a href={`tel:${site.phone.replace(/\s/g, '')}`}>{site.phone}</a></li>}
+        <li>{site.location}</li>
+      </ul>
+    </div>
+  </div>
+  <div class="container legal">
+    <p>© {year} {site.fullName}. All rights reserved.</p>
+    <p><a href="/privacy">Privacy notice</a></p>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    background: var(--navy-900);
+    color: #c9d3e6;
+    padding-top: 64px;
+    font-size: 1rem;
+  }
+  .cols {
+    display: grid;
+    gap: 40px;
+    grid-template-columns: 1fr;
+  }
+  @media (min-width: 760px) {
+    .cols {
+      grid-template-columns: 1.6fr 1fr 1fr 1.2fr;
+    }
+  }
+  .about img {
+    width: 200px;
+    margin-bottom: 16px;
+  }
+  .h {
+    font-size: 0.85rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: #fff;
+    margin-bottom: 14px;
+  }
+  ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    gap: 8px;
+  }
+  a {
+    color: #e7ecf6;
+    text-decoration: none;
+    overflow-wrap: anywhere;
+  }
+  a:hover {
+    color: #fff;
+    text-decoration: underline;
+  }
+  .legal {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 8px 24px;
+    margin-top: 48px;
+    padding-block: 20px;
+    border-top: 1px solid rgb(255 255 255 / 0.12);
+    font-size: 0.9rem;
+  }
+  .legal p {
+    margin: 0;
+  }
+</style>

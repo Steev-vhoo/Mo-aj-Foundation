@@ -1,0 +1,28 @@
+---
+import Base from '../../layouts/Base.astro';
+import PageHeader from '../../components/PageHeader.astro';
+import EntryCard from '../../components/EntryCard.astro';
+import { getNews } from '../../lib/content';
+
+const news = await getNews();
+---
+
+<Base title="News" description="News, events and campaign updates from the MO-AJ Foundation.">
+  <PageHeader eyebrow="News" title="News & updates" lead="Campaigns, events and updates from the foundation." />
+  <section class="section">
+    <div class="container grid grid--3">
+      {
+        news.map((n) => (
+          <EntryCard
+            href={`/news/${n.id}`}
+            title={n.data.title}
+            summary={n.data.summary}
+            date={n.data.date}
+            image={n.data.image}
+            imageAlt={n.data.imageAlt}
+          />
+        ))
+      }
+    </div>
+  </section>
+</Base>

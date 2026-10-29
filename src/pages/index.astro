@@ -1,0 +1,269 @@
+---
+import Base from '../layouts/Base.astro';
+import Photo from '../components/Photo.astro';
+import EntryCard from '../components/EntryCard.astro';
+import CtaBand from '../components/CtaBand.astro';
+import SocialFeed from '../components/SocialFeed.astro';
+import { getStories, getNews } from '../lib/content';
+
+const stories = (await getStories()).slice(0, 3);
+const news = (await getNews()).slice(0, 3);
+
+const pillars = [
+  {
+    title: 'Tell their stories',
+    text: 'We put a human face to road crashes in Ghana by sharing the stories of victims and the families they leave behind.',
+  },
+  {
+    title: 'Stand with families',
+    text: 'We support bereaved families and survivors as they rebuild, so loss does not have to mean the end of hope.',
+  },
+  {
+    title: 'Push for safer roads',
+    text: 'We rally the public and decision-makers behind better road safety policy, enforcement and infrastructure.',
+  },
+  {
+    title: "Carry Mark's ideals",
+    text: 'We champion what Mark held dear: education, entrepreneurship, leadership, financial independence and community.',
+  },
+];
+---
+
+<Base>
+  <section class="hero">
+    <div class="container hero-grid">
+      <div class="hero-copy">
+        <p class="eyebrow">In memory of Mark "Junior" Ofosu-Ampadu</p>
+        <h1>Every life lost on our roads has a name, a family and a story.</h1>
+        <p class="lead">
+          The MO-AJ Foundation tells those stories, supports families affected by road crashes, and rallies Ghana
+          behind safer roads, so that fewer families know this loss.
+        </p>
+        <div class="btn-row">
+          <a href="/donate" class="btn btn--primary">Donate</a>
+          <a href="/get-involved#volunteer" class="btn btn--outline">Become a volunteer</a>
+        </div>
+      </div>
+      <div class="hero-media">
+        <Photo label="Hero photo: Mark, or a foundation event / community outreach" ratio="4 / 5" eager />
+        <div class="hero-quote">
+          <p>"Our aim is to prevent others from suffering similar loss in their lives."</p>
+          <span>The Ofosu-Ampadu family</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="intro">
+        <p class="eyebrow">What we do</p>
+        <h2>Turning grief into change</h2>
+        <p class="lead">
+          Founded by the Ofosu-Ampadu family after Mark was killed in a road crash in January 2020, the foundation
+          brings people from all walks of life together for one purpose: safer roads for everyone in Ghana.
+        </p>
+      </div>
+      <div class="grid grid--4 pillars">
+        {
+          pillars.map((p, i) => (
+            <div class="card pillar">
+              <span class="num" aria-hidden="true">
+                {String(i + 1).padStart(2, '0')}
+              </span>
+              <h3>{p.title}</h3>
+              <p>{p.text}</p>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--tint">
+    <div class="container split">
+      <Photo label="Photo of Mark Ofosu-Ampadu Jnr" ratio="1 / 1" />
+      <div>
+        <p class="eyebrow">Our story</p>
+        <h2>Remembering Junior</h2>
+        <p>
+          Mark, affectionately called "Junior", was lively, principled, ambitious, industrious, selfless and
+          God-fearing. His bright light was taken on Saturday, 25 January 2020, in a road traffic accident.
+        </p>
+        <p>
+          In the months that followed, his family chose to turn their grief into purpose: to speak up for road
+          safety, to stand with other families, and to keep alive the ideals Mark lived by.
+        </p>
+        <a href="/stories/marks-story" class="btn btn--navy">Read Mark's story</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="head-row">
+        <div>
+          <p class="eyebrow">Stories</p>
+          <h2>Faces behind the figures</h2>
+        </div>
+        <a href="/stories" class="btn btn--outline">All stories</a>
+      </div>
+      <div class="grid grid--3">
+        {
+          stories.map((s) => (
+            <EntryCard
+              href={`/stories/${s.id}`}
+              title={s.data.title}
+              summary={s.data.summary}
+              date={s.data.date}
+              kicker={s.data.person}
+              image={s.data.image}
+              imageAlt={s.data.imageAlt}
+            />
+          ))
+        }
+        <a href="/stories#share" class="card share">
+          <h3>Has a road crash touched your family?</h3>
+          <p>Your story can help others understand the human cost and push for change. We will tell it with care.</p>
+          <span class="btn btn--primary">Share your story</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--tint">
+    <div class="container two-col">
+      <div>
+        <div class="head-row">
+          <div>
+            <p class="eyebrow">News</p>
+            <h2>Latest updates</h2>
+          </div>
+          <a href="/news" class="btn btn--outline">All news</a>
+        </div>
+        <div class="grid">
+          {
+            news.map((n) => (
+              <EntryCard
+                href={`/news/${n.id}`}
+                title={n.data.title}
+                summary={n.data.summary}
+                date={n.data.date}
+                image={n.data.image}
+                imageAlt={n.data.imageAlt}
+              />
+            ))
+          }
+        </div>
+      </div>
+      <div>
+        <p class="eyebrow">Follow us</p>
+        <h2>On social media</h2>
+        <SocialFeed />
+      </div>
+    </div>
+  </section>
+
+  <CtaBand />
+</Base>
+
+<style>
+  .hero {
+    padding-block: clamp(40px, 7vw, 88px);
+    background:
+      radial-gradient(900px 400px at 100% 0%, rgb(10 40 94 / 0.09), transparent 70%),
+      radial-gradient(500px 240px at 0% 100%, rgb(255 6 0 / 0.05), transparent 70%),
+      var(--bg);
+  }
+  .hero-grid {
+    display: grid;
+    gap: clamp(32px, 5vw, 64px);
+    align-items: center;
+  }
+  @media (min-width: 900px) {
+    .hero-grid {
+      grid-template-columns: 1.2fr 1fr;
+    }
+  }
+  .hero-media {
+    position: relative;
+    max-width: 480px;
+    width: 100%;
+    justify-self: center;
+  }
+  .hero-quote {
+    position: relative;
+    margin: -48px 16px 0;
+    background: #fff;
+    border-radius: var(--radius);
+    padding: 18px 22px;
+    box-shadow: var(--shadow);
+    border-left: 5px solid var(--red);
+  }
+  .hero-quote p {
+    margin: 0 0 4px;
+    font-family: var(--font-head);
+    font-weight: 500;
+    color: var(--navy);
+    line-height: 1.4;
+  }
+  .hero-quote span {
+    font-size: 0.9rem;
+    color: var(--muted);
+  }
+  .intro {
+    max-width: 720px;
+    margin-bottom: 40px;
+  }
+  .pillar .num {
+    display: inline-block;
+    font-family: var(--font-head);
+    font-weight: 700;
+    color: var(--red-600);
+    margin-bottom: 8px;
+  }
+  .pillar p {
+    margin: 0;
+    color: var(--muted);
+    font-size: 1rem;
+  }
+  .head-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: end;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 28px;
+  }
+  .head-row h2 {
+    margin: 0;
+  }
+  .share {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 4px;
+    text-decoration: none;
+    color: inherit;
+    background: var(--navy);
+    border-color: var(--navy);
+  }
+  .share h3 {
+    color: #fff;
+  }
+  .share p {
+    color: #c9d3e6;
+  }
+  .share .btn {
+    align-self: flex-start;
+  }
+  .two-col {
+    display: grid;
+    gap: 48px;
+  }
+  @media (min-width: 960px) {
+    .two-col {
+      grid-template-columns: 1.3fr 1fr;
+    }
+  }
+</style>

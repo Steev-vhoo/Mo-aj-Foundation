@@ -1,0 +1,144 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHeader from '../components/PageHeader.astro';
+import CtaBand from '../components/CtaBand.astro';
+
+const tips = [
+  { who: 'Drivers', items: ['Keep to the speed limit, and slow down further in rain, at night and near schools.', 'Never drive after drinking alcohol or when tired.', 'Put your phone away while driving.', 'Make sure everyone in the vehicle is buckled up, every trip.'] },
+  { who: 'Motorcyclists & riders', items: ['Always wear a properly fastened helmet, and make sure your passenger does too.', 'Use lights and wear bright or reflective clothing.', 'Do not carry more passengers or load than the bike is built for.'] },
+  { who: 'Pedestrians', items: ['Use footbridges, zebra crossings and walkways where they exist.', 'Make eye contact with drivers before crossing.', 'Wear something bright or reflective when walking at night.'] },
+  { who: 'Passengers', items: ['Wear your seatbelt, front and back.', 'Speak up if a driver is speeding, on the phone or unfit to drive.', 'Do not board an overloaded vehicle.'] },
+];
+
+// TODO: the foundation to confirm these numbers before launch.
+const emergency = [
+  { label: 'National emergency', number: '112' },
+  { label: 'Ambulance', number: '193' },
+  { label: 'Police', number: '191' },
+  { label: 'Fire service', number: '192' },
+];
+
+// TODO: the foundation to confirm its policy priorities.
+const asks = [
+  'Faster, better-equipped emergency response to road crashes',
+  'Safer road design, lighting and pedestrian crossings',
+  'Consistent enforcement of speed, drink-driving, seatbelt and helmet laws',
+  'Support for families and survivors after a crash',
+];
+---
+
+<Base title="Road safety" description="Road safety advice, emergency numbers and the MO-AJ Foundation's advocacy for safer roads in Ghana.">
+  <PageHeader
+    eyebrow="Road safety"
+    title="Safer roads start with each of us"
+    lead="Simple choices save lives. Here is what we can all do today, and what we are asking leaders to do."
+  />
+
+  <section class="section">
+    <div class="container">
+      <div class="grid grid--2">
+        {
+          tips.map((t) => (
+            <div class="card">
+              <h2 class="h3">{t.who}</h2>
+              <ul class="ticks">
+                {t.items.map((i) => <li>{i}</li>)}
+              </ul>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--tint">
+    <div class="container split">
+      <div>
+        <p class="eyebrow">In an emergency</p>
+        <h2>If you witness a crash</h2>
+        <ol class="steps">
+          <li>Make the scene safe: switch on hazard lights and warn oncoming traffic.</li>
+          <li>Call for help straight away and give the exact location.</li>
+          <li>Do not move injured people unless they are in immediate danger.</li>
+          <li>Stay with the injured, keep them calm and wait for help.</li>
+        </ol>
+      </div>
+      <div class="grid grid--2 numbers">
+        {
+          emergency.map((e) => (
+            <a class="card num" href={`tel:${e.number}`}>
+              <span class="n">{e.number}</span>
+              <span>{e.label}</span>
+            </a>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container narrow">
+      <p class="eyebrow">Our advocacy</p>
+      <h2>What we are calling for</h2>
+      <p class="lead">
+        We take the stories of victims and families to the people who make decisions about our roads. Our
+        priorities include:
+      </p>
+      <ul class="ticks">
+        {asks.map((a) => <li>{a}</li>)}
+      </ul>
+    </div>
+  </section>
+
+  <CtaBand title="Add your voice" text="Volunteer at our awareness events, share a story, or support our advocacy with a gift." />
+</Base>
+
+<style>
+  .h3 {
+    font-size: 1.35rem;
+  }
+  .ticks {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    gap: 10px;
+  }
+  .ticks li {
+    position: relative;
+    padding-left: 30px;
+  }
+  .ticks li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0.6em;
+    width: 16px;
+    height: 4px;
+    border-radius: 2px;
+    background: var(--red);
+  }
+  .steps {
+    padding-left: 1.2em;
+    display: grid;
+    gap: 8px;
+  }
+  .num {
+    display: grid;
+    gap: 2px;
+    text-decoration: none;
+    color: var(--text);
+    padding: 22px;
+  }
+  .num .n {
+    font-family: var(--font-head);
+    font-size: 2.2rem;
+    font-weight: 700;
+    color: var(--red-600);
+    line-height: 1;
+  }
+  .numbers {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+  }
+</style>

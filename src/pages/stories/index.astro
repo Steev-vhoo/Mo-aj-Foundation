@@ -1,0 +1,61 @@
+---
+import Base from '../../layouts/Base.astro';
+import PageHeader from '../../components/PageHeader.astro';
+import EntryCard from '../../components/EntryCard.astro';
+import Form from '../../components/Form.astro';
+import { getStories } from '../../lib/content';
+import { forms } from '../../config';
+
+const stories = await getStories();
+---
+
+<Base title="Stories" description="The stories of road crash victims and their families in Ghana.">
+  <PageHeader
+    eyebrow="Stories & impact"
+    title="Faces behind the figures"
+    lead="Every road crash statistic is a person with a name and a family. These are their stories, shared with their families' permission."
+  />
+
+  <section class="section">
+    <div class="container grid grid--3">
+      {
+        stories.map((s) => (
+          <EntryCard
+            href={`/stories/${s.id}`}
+            title={s.data.title}
+            summary={s.data.summary}
+            date={s.data.date}
+            kicker={s.data.person}
+            image={s.data.image}
+            imageAlt={s.data.imageAlt}
+          />
+        ))
+      }
+    </div>
+  </section>
+
+  <section class="section section--tint" id="share">
+    <div class="container narrow">
+      <p class="eyebrow">Share a story</p>
+      <h2>Has a road crash affected you or your family?</h2>
+      <p>
+        If you would like to tell your story, or the story of someone you lost, we would be honoured to hear it.
+        A member of our team will contact you first. Nothing is published without your written consent, and you
+        can ask us to remove a story at any time.
+      </p>
+      <div class="card">
+        <Form endpoint={forms.contact} subject="Story submission - MO-AJ Foundation website" submitLabel="Send my story">
+          <div class="form-row">
+            <div class="field"><label for="s-name">Your name</label><input id="s-name" name="name" required autocomplete="name" /></div>
+            <div class="field"><label for="s-phone">Phone or WhatsApp</label><input id="s-phone" name="phone" type="tel" autocomplete="tel" /></div>
+          </div>
+          <div class="field"><label for="s-email">Email</label><input id="s-email" name="email" type="email" required autocomplete="email" /></div>
+          <div class="field">
+            <label for="s-story">Tell us a little about the story</label>
+            <textarea id="s-story" name="story" required></textarea>
+          </div>
+        </Form>
+      </div>
+    </div>
+  </section>
+</Base>

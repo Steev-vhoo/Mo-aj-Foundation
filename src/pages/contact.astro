@@ -1,0 +1,78 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHeader from '../components/PageHeader.astro';
+import Form from '../components/Form.astro';
+import SocialLinks from '../components/SocialLinks.astro';
+import { forms, site } from '../config';
+---
+
+<Base title="Contact us" description="Get in touch with the MO-AJ Foundation.">
+  <PageHeader eyebrow="Contact" title="We'd love to hear from you" lead="Questions, partnerships, media requests or just a kind word: send us a message." />
+
+  <section class="section">
+    <div class="container contact-grid">
+      <div class="card">
+        <Form endpoint={forms.contact} subject="Message from the MO-AJ Foundation website" submitLabel="Send message">
+          <div class="form-row">
+            <div class="field"><label for="c-name">Your name</label><input id="c-name" name="name" required autocomplete="name" /></div>
+            <div class="field"><label for="c-email">Email</label><input id="c-email" name="email" type="email" required autocomplete="email" /></div>
+          </div>
+          <div class="field">
+            <label for="c-topic">What is it about?</label>
+            <select id="c-topic" name="topic">
+              <option>General enquiry</option>
+              <option>Partnership</option>
+              <option>Media / press</option>
+              <option>Donations</option>
+              <option>Volunteering</option>
+              <option>Sharing a story</option>
+            </select>
+          </div>
+          <div class="field"><label for="c-msg">Message</label><textarea id="c-msg" name="message" required></textarea></div>
+        </Form>
+      </div>
+      <aside class="info">
+        <h2 class="h3">Other ways to reach us</h2>
+        <dl>
+          <dt>Email</dt>
+          <dd><a href={`mailto:${site.email}`}>{site.email}</a></dd>
+          {site.phone && <><dt>Phone</dt><dd><a href={`tel:${site.phone.replace(/\s/g, '')}`}>{site.phone}</a></dd></>}
+          <dt>Location</dt>
+          <dd>{site.location}</dd>
+        </dl>
+        <SocialLinks />
+      </aside>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .contact-grid {
+    display: grid;
+    gap: 32px;
+    align-items: start;
+  }
+  @media (min-width: 900px) {
+    .contact-grid {
+      grid-template-columns: 1.6fr 1fr;
+    }
+  }
+  .h3 {
+    font-size: 1.3rem;
+  }
+  .info {
+    color: var(--navy);
+  }
+  dl {
+    margin: 0 0 24px;
+  }
+  dt {
+    font-size: 0.9rem;
+    color: var(--muted);
+  }
+  dd {
+    margin: 0 0 14px;
+    font-weight: 600;
+    overflow-wrap: anywhere;
+  }
+</style>

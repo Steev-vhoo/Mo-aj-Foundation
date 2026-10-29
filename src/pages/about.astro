@@ -1,0 +1,138 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHeader from '../components/PageHeader.astro';
+import Photo from '../components/Photo.astro';
+import CtaBand from '../components/CtaBand.astro';
+
+const ideals = ['Community engagement', 'Educational excellence', 'Financial independence', 'Entrepreneurship', 'Leadership'];
+
+// TODO: replace with the real board / team once the foundation sends names, roles and photos.
+const team = [
+  { name: 'Name to be confirmed', role: 'Founder' },
+  { name: 'Name to be confirmed', role: 'Trustee' },
+  { name: 'Name to be confirmed', role: 'Programmes Lead' },
+];
+---
+
+<Base title="About us" description="The story, mission and people behind the Mark Ofosu-Ampadu Jnr (MO-AJ) Foundation.">
+  <PageHeader
+    eyebrow="About us"
+    title="Born from loss, built for change"
+    lead="The Mark Ofosu-Ampadu Jnr Foundation was founded by the Ofosu-Ampadu family and others of like mind to take a stand on road safety in Ghana."
+  />
+
+  <section class="section">
+    <div class="container split">
+      <div>
+        <p class="eyebrow">Our mission</p>
+        <h2>A human face to road carnage</h2>
+        <p class="lead">
+          To put a human face to road carnage in Ghana, telling the stories of road accident victims and their
+          families, while galvanising public and stakeholder support to influence road safety policy and
+          infrastructure planning and decision-making at the highest levels of leadership.
+        </p>
+      </div>
+      <Photo label="Photo: the family or a foundation gathering" ratio="4 / 3" />
+    </div>
+  </section>
+
+  <section class="section section--tint">
+    <div class="container split">
+      <Photo label="Photo of Mark Ofosu-Ampadu Jnr" ratio="1 / 1" />
+      <div>
+        <p class="eyebrow">Why we exist</p>
+        <h2>Remembering Mark</h2>
+        <p>
+          Mark "Junior" Ofosu-Ampadu died in a road traffic accident on Saturday, 25 January 2020. The accounts
+          from the scene convinced his family that Ghana's response to road accidents, and to road safety as a
+          whole, was not good enough, and may have contributed to their loss.
+        </p>
+        <p>
+          Out of a year of grief, reflection and family unity came a decision: to turn their pain into a
+          vehicle for change, so that others are spared a loss like theirs.
+        </p>
+        <a href="/stories/marks-story" class="btn btn--navy">Read the family's words</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="grid grid--3">
+        <div class="card">
+          <h3>Advocacy</h3>
+          <p>We bring the human cost of road crashes to the people who make road policy and infrastructure decisions.</p>
+        </div>
+        <div class="card">
+          <h3>Awareness</h3>
+          <p>We speak to the public through stories, events and campaigns that make road safety personal.</p>
+        </div>
+        <div class="card">
+          <h3>Family support</h3>
+          <p>We walk with families who have lost loved ones on the road, helping them stay productive and hopeful.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--navy">
+    <div class="container">
+      <p class="eyebrow">Mark's ideals</p>
+      <h2>The values we carry forward</h2>
+      <p class="lead">Alongside our road safety work, we celebrate Mark's life by supporting the ideals he held dear.</p>
+      <ul class="ideals">
+        {ideals.map((i) => <li>{i}</li>)}
+      </ul>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <p class="eyebrow">Our people</p>
+      <h2>The team</h2>
+      <div class="grid grid--3 team">
+        {
+          team.map((m) => (
+            <div class="member">
+              <Photo label="Team photo" ratio="1 / 1" />
+              <h3>{m.name}</h3>
+              <p>{m.role}</p>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <CtaBand />
+</Base>
+
+<style>
+  .ideals {
+    list-style: none;
+    padding: 0;
+    margin: 24px 0 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  .ideals li {
+    padding: 10px 20px;
+    border-radius: 999px;
+    border: 1.5px solid rgb(255 255 255 / 0.4);
+    color: #fff;
+    font-family: var(--font-head);
+    font-weight: 500;
+  }
+  .card p {
+    margin: 0;
+    color: var(--muted);
+  }
+  .member h3 {
+    margin: 16px 0 2px;
+  }
+  .member p {
+    color: var(--muted);
+    margin: 0;
+  }
+</style>

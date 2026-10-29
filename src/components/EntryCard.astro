@@ -1,0 +1,73 @@
+---
+import Photo from './Photo.astro';
+import type { ImageMetadata } from 'astro';
+
+interface Props {
+  href: string;
+  title: string;
+  summary: string;
+  date: Date;
+  kicker?: string;
+  image?: ImageMetadata;
+  imageAlt?: string;
+}
+const { href, title, summary, date, kicker, image, imageAlt } = Astro.props;
+const formatted = date.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
+---
+
+<article class="entry">
+  <Photo src={image} alt={imageAlt} ratio="16 / 10" label="Story photo" />
+  <div class="body">
+    <p class="meta">
+      {kicker && <span>{kicker} · </span>}<time datetime={date.toISOString()}>{formatted}</time>
+    </p>
+    <h3><a href={href}>{title}</a></h3>
+    <p>{summary}</p>
+  </div>
+</article>
+
+<style>
+  .entry {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+    box-shadow: var(--shadow);
+    transition: transform 0.15s;
+  }
+  .entry:hover {
+    transform: translateY(-3px);
+  }
+  .entry :global(.photo) {
+    border-radius: 0;
+  }
+  .body {
+    padding: 22px 24px 26px;
+  }
+  .meta {
+    font-size: 0.9rem;
+    color: var(--muted);
+    margin-bottom: 6px;
+  }
+  h3 a {
+    color: var(--navy);
+    text-decoration: none;
+  }
+  /* whole card is clickable */
+  h3 a::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+  }
+  .entry:hover h3 a {
+    color: var(--red-600);
+  }
+  p:last-child {
+    margin: 0;
+    color: var(--muted);
+    font-size: 1rem;
+  }
+</style>

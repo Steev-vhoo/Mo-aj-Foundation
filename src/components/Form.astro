@@ -1,0 +1,71 @@
+---
+/**
+ * Posts to a form service (see `forms` in src/config.ts). When no endpoint is set yet,
+ * the submission opens a pre-filled email to the foundation instead, so nothing is lost.
+ */
+import { site } from '../config';
+
+interface Props {
+  endpoint: string;
+  subject: string;
+  submitLabel?: string;
+}
+const { endpoint, subject, submitLabel = 'Send' } = Astro.props;
+---
+
+<form class="form js-form" method="post" action={endpoint || `mailto:${site.email}`} data-endpoint={endpoint} data-email={site.email} data-subject={subject}>
+  <input type="hidden" name="_subject" value={subject} />
+  <label class="hp">Leave this empty <input type="text" name="_gotcha" tabindex="-1" autocomplete="off" /></label>
+  <slot />
+  <label class="check">
+    <input type="checkbox" name="consent" required />
+    <span>I agree that the MO-AJ Foundation may store and use these details to respond to me, as set out in the <a href="/privacy">privacy notice</a>.</span>
+  </label>
+  <div>
+    <button type="submit" class="btn btn--navy">{submitLabel}</button>
+  </div>
+  <p class="form-status" role="status" aria-live="polite"></p>
+</form>
+
+<script>
+  document.querySelectorAll<HTMLFormElement>('.js-form').forEach((form) => {
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const status = form.querySelector<HTMLElement>('.form-status')!;
+      const button = form.querySelector<HTMLButtonElement>('button[type=submit]')!;
+      const data = new FormData(form);
+      if (data.get('_gotcha')) return;
+      const endpoint = form.dataset.endpoint;
+
+      if (!endpoint) {
+        // No form service configured yet: hand over to the visitor's email app.
+        const lines: string[] = [];
+        for (const [key, value] of data) {
+          if (key.startsWith('_') || key === 'consent') continue;
+          lines.push(`${key}: ${value}`);
+        }
+        const href = `mailto:${form.dataset.email}?subject=${encodeURIComponent(form.dataset.subject ?? '')}&body=${encodeURIComponent(lines.join('\n'))}`;
+        window.location.href = href;
+        status.dataset.state = 'ok';
+        status.textContent = 'Your email app should open with your message ready to send.';
+        return;
+      }
+
+      button.disabled = true;
+      status.dataset.state = '';
+      status.textContent = 'Sending…';
+      try {
+        const res = await fetch(endpoint, { method: 'POST', body: data, headers: { Accept: 'application/json' } });
+        if (!res.ok) throw new Error(String(res.status));
+        form.reset();
+        status.dataset.state = 'ok';
+        status.textContent = 'Thank you. We have received your message and will be in touch soon.';
+      } catch {
+        status.dataset.state = 'error';
+        status.textContent = `Sorry, something went wrong. Please email us at ${form.dataset.email}.`;
+      } finally {
+        button.disabled = false;
+      }
+    });
+  });
+</script>

@@ -1,0 +1,176 @@
+---
+import { nav } from '../config';
+const path = Astro.url.pathname.replace(/\/$/, '') || '/';
+const isActive = (href: string) => path === href || path.startsWith(href + '/');
+---
+
+<header class="site-header">
+  <div class="container bar">
+    <a href="/" class="brand" aria-label="MO-AJ Foundation home">
+      <img src="/images/logo.png" alt="MO-AJ Foundation" width="440" height="223" />
+    </a>
+
+    <button class="menu-toggle" aria-expanded="false" aria-controls="site-nav">
+      <span class="visually-hidden">Menu</span>
+      <span class="bars" aria-hidden="true"></span>
+    </button>
+
+    <nav id="site-nav" class="nav" aria-label="Main">
+      <ul>
+        {
+          nav.map((item) => (
+            <li>
+              <a href={item.href} aria-current={isActive(item.href) ? 'page' : undefined}>
+                {item.label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+      <a href="/donate" class="btn btn--primary donate">Donate</a>
+    </nav>
+  </div>
+</header>
+
+<script>
+  const toggle = document.querySelector<HTMLButtonElement>('.menu-toggle');
+  const header = document.querySelector('.site-header');
+  toggle?.addEventListener('click', () => {
+    const open = toggle.getAttribute('aria-expanded') === 'true';
+    toggle.setAttribute('aria-expanded', String(!open));
+    header?.classList.toggle('is-open', !open);
+    document.body.style.overflow = open ? '' : 'hidden';
+  });
+</script>
+
+<style>
+  .site-header {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background: #fff;
+    border-bottom: 1px solid var(--border);
+  }
+  .bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    min-height: 76px;
+  }
+  .brand img {
+    height: 60px;
+    width: auto;
+  }
+  .nav ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    gap: 4px;
+  }
+  .nav {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+  .nav ul a {
+    display: block;
+    padding: 8px 12px;
+    border-radius: 8px;
+    font-family: var(--font-head);
+    font-weight: 500;
+    font-size: 1rem;
+    color: var(--navy);
+    text-decoration: none;
+  }
+  .nav ul a:hover {
+    background: var(--navy-50);
+    color: var(--navy);
+  }
+  .nav ul a[aria-current='page'] {
+    color: var(--red-600);
+  }
+  .donate {
+    min-height: 42px;
+    padding: 8px 22px;
+  }
+  .menu-toggle {
+    display: none;
+    width: 48px;
+    height: 48px;
+    border: 0;
+    background: transparent;
+    cursor: pointer;
+    position: relative;
+  }
+  .bars,
+  .bars::before,
+  .bars::after {
+    position: absolute;
+    left: 12px;
+    width: 24px;
+    height: 2.5px;
+    border-radius: 2px;
+    background: var(--navy);
+    transition: transform 0.2s;
+  }
+  .bars {
+    top: 23px;
+  }
+  .bars::before,
+  .bars::after {
+    content: '';
+    left: 0;
+  }
+  .bars::before {
+    top: -8px;
+  }
+  .bars::after {
+    top: 8px;
+  }
+  .is-open .bars {
+    background: transparent;
+  }
+  .is-open .bars::before {
+    transform: translateY(8px) rotate(45deg);
+  }
+  .is-open .bars::after {
+    transform: translateY(-8px) rotate(-45deg);
+  }
+
+  @media (max-width: 1080px) {
+    .menu-toggle {
+      display: block;
+    }
+    .brand img {
+      height: 44px;
+    }
+    .nav {
+      display: none;
+      position: fixed;
+      inset: 76px 0 0 0;
+      background: #fff;
+      flex-direction: column;
+      align-items: stretch;
+      padding: 16px var(--gutter) 32px;
+      overflow-y: auto;
+    }
+    .is-open .nav {
+      display: flex;
+    }
+    .nav ul {
+      flex-direction: column;
+    }
+    .nav ul a {
+      font-size: 1.25rem;
+      padding: 14px 8px;
+      border-bottom: 1px solid var(--border);
+      border-radius: 0;
+    }
+    .donate {
+      min-height: 52px;
+      margin-top: 8px;
+    }
+  }
+</style>

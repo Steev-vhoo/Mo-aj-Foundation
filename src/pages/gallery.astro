@@ -1,0 +1,158 @@
+---
+import { Image, getImage } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+import Base from '../layouts/Base.astro';
+import PageHeader from '../components/PageHeader.astro';
+import Photo from '../components/Photo.astro';
+import { site } from '../config';
+
+// Every image dropped into src/assets/gallery/ shows up here, newest file name last.
+// The file name becomes the caption: "road-safety-walk-accra-2026.jpg" → "Road safety walk accra 2026".
+const files = import.meta.glob<{ default: ImageMetadata }>('../assets/gallery/*.{jpg,jpeg,png,webp,avif}', { eager: true });
+const photos = await Promise.all(
+  Object.entries(files)
+    .sort(([a], [b]) => a.localeCompare(b))
+    .map(async ([path, mod]) => {
+      const name = path.split('/').pop()!.replace(/\.\w+$/, '').replace(/[-_]+/g, ' ');
+      const caption = name.charAt(0).toUpperCase() + name.slice(1);
+      const large = await getImage({ src: mod.default, width: 1600 });
+      return { src: mod.default, caption, large: large.src };
+    }),
+);
+---
+
+<Base title="Gallery & media" description="Photos and media resources from the MO-AJ Foundation.">
+  <PageHeader eyebrow="Gallery & media" title="Moments from our journey" lead="Events, campaigns and the people who make this work possible." />
+
+  <section class="section">
+    <div class="container">
+      {
+        photos.length > 0 ? (
+          <ul class="gallery">
+            {photos.map((p) => (
+              <li>
+                <a href={p.large} class="js-lightbox" data-caption={p.caption}>
+                  <Image src={p.src} alt={p.caption} widths={[400, 800]} sizes="(max-width: 700px) 50vw, 300px" />
+                </a>
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <>
+            <ul class="gallery">
+              {Array.from({ length: 6 }, () => (
+                <li>
+                  <Photo label="Event photo" ratio="1 / 1" />
+                </li>
+              ))}
+            </ul>
+            <p class="notice">Setup: add photos to <code>src/assets/gallery/</code> and they will appear here automatically.</p>
+          </>
+        )
+      }
+    </div>
+  </section>
+
+  <section class="section section--tint">
+    <div class="container split">
+      <div>
+        <p class="eyebrow">Press & media</p>
+        <h2>For journalists</h2>
+        <p>
+          For interviews, comment on road safety in Ghana, or permission to use our photos, contact us at
+          <a href={`mailto:${site.email}`}>{site.email}</a>.
+        </p>
+        <a href="/images/logo.png" download class="btn btn--outline">Download our logo</a>
+      </div>
+      <img src="/images/logo.png" alt="MO-AJ Foundation logo" width="440" height="223" loading="lazy" class="press-logo" />
+    </div>
+  </section>
+
+  <dialog class="lightbox" aria-label="Photo viewer">
+    <form method="dialog"><button class="close" aria-label="Close">×</button></form>
+    <img alt="" />
+    <p class="cap"></p>
+  </dialog>
+</Base>
+
+<script>
+  const dialog = document.querySelector<HTMLDialogElement>('.lightbox');
+  const img = dialog?.querySelector('img');
+  const cap = dialog?.querySelector('.cap');
+  document.querySelectorAll<HTMLAnchorElement>('.js-lightbox').forEach((a) => {
+    a.addEventListener('click', (e) => {
+      if (!dialog || !img || !cap) return;
+      e.preventDefault();
+      img.src = a.href;
+      img.alt = a.dataset.caption ?? '';
+      cap.textContent = a.dataset.caption ?? '';
+      dialog.showModal();
+    });
+  });
+  dialog?.addEventListener('click', (e) => {
+    if (e.target === dialog) dialog.close();
+  });
+</script>
+
+<style>
+  .gallery {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 24px;
+    display: grid;
+    gap: 12px;
+    grid-template-columns: repeat(auto-fill, minmax(min(45%, 260px), 1fr));
+  }
+  .gallery img {
+    width: 100%;
+    aspect-ratio: 1;
+    object-fit: cover;
+    border-radius: var(--radius-sm);
+    transition: opacity 0.15s;
+  }
+  .gallery a:hover img {
+    opacity: 0.85;
+  }
+  .press-logo {
+    max-width: 360px;
+    width: 100%;
+    justify-self: center;
+    background: #fff;
+    padding: 32px;
+    border-radius: var(--radius);
+  }
+  .lightbox {
+    border: 0;
+    padding: 0;
+    background: transparent;
+    max-width: min(96vw, 1200px);
+    max-height: 92vh;
+  }
+  .lightbox::backdrop {
+    background: rgb(6 26 63 / 0.9);
+  }
+  .lightbox img {
+    max-height: 82vh;
+    width: auto;
+    margin-inline: auto;
+    border-radius: var(--radius-sm);
+  }
+  .cap {
+    color: #fff;
+    text-align: center;
+    margin: 12px 0 0;
+  }
+  .close {
+    position: fixed;
+    top: 12px;
+    right: 16px;
+    width: 48px;
+    height: 48px;
+    border: 0;
+    border-radius: 50%;
+    background: #fff;
+    color: var(--navy);
+    font-size: 1.8rem;
+    cursor: pointer;
+  }
+</style>

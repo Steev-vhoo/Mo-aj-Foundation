@@ -1,0 +1,103 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHeader from '../components/PageHeader.astro';
+import Form from '../components/Form.astro';
+import { forms } from '../config';
+
+const ways = [
+  { title: 'Volunteer', text: 'Help at awareness events, school visits, campaigns and family support activities.', href: '#volunteer', cta: 'Sign up below' },
+  { title: 'Give', text: 'A one-off or regular gift funds family support and road safety campaigns.', href: '/donate', cta: 'Donate' },
+  { title: 'Partner', text: 'Companies, schools, churches, media and agencies: work with us on road safety.', href: '/contact', cta: 'Talk to us' },
+  { title: 'Share a story', text: 'Help put a human face to road crashes by sharing your family’s story.', href: '/stories#share', cta: 'Share your story' },
+];
+
+const interests = ['Awareness events & campaigns', 'School & community outreach', 'Supporting bereaved families', 'Social media & communications', 'Photography & video', 'Fundraising', 'Research & policy', 'Admin & organising'];
+---
+
+<Base title="Get involved" description="Volunteer, partner with or support the MO-AJ Foundation's road safety work in Ghana.">
+  <PageHeader
+    eyebrow="Get involved"
+    title="Stand with us for safer roads"
+    lead="Whoever you are and wherever you are, there is a way to help. Together we can make sure fewer families know this loss."
+  />
+
+  <section class="section">
+    <div class="container grid grid--4">
+      {
+        ways.map((w) => (
+          <div class="card way">
+            <h2 class="h3">{w.title}</h2>
+            <p>{w.text}</p>
+            <a href={w.href} class="link">{w.cta} →</a>
+          </div>
+        ))
+      }
+    </div>
+  </section>
+
+  <section class="section section--tint" id="volunteer">
+    <div class="container narrow">
+      <p class="eyebrow">Volunteer registration</p>
+      <h2>Join our volunteers</h2>
+      <p>Tell us a little about yourself and how you would like to help. We will be in touch about upcoming opportunities.</p>
+      <div class="card">
+        <Form endpoint={forms.volunteer} subject="Volunteer registration - MO-AJ Foundation website" submitLabel="Register as a volunteer">
+          <div class="form-row">
+            <div class="field"><label for="v-name">Full name</label><input id="v-name" name="name" required autocomplete="name" /></div>
+            <div class="field"><label for="v-phone">Phone or WhatsApp</label><input id="v-phone" name="phone" type="tel" required autocomplete="tel" /></div>
+          </div>
+          <div class="form-row">
+            <div class="field"><label for="v-email">Email</label><input id="v-email" name="email" type="email" required autocomplete="email" /></div>
+            <div class="field"><label for="v-location">Town / city</label><input id="v-location" name="location" autocomplete="address-level2" /></div>
+          </div>
+          <div class="field">
+            <fieldset>
+              <legend>I'm interested in</legend>
+              <div class="checks">
+                {
+                  interests.map((i) => (
+                    <label class="check">
+                      <input type="checkbox" name="interests" value={i} />
+                      <span>{i}</span>
+                    </label>
+                  ))
+                }
+              </div>
+            </fieldset>
+          </div>
+          <div class="field">
+            <label for="v-availability">Availability</label>
+            <select id="v-availability" name="availability">
+              <option>Weekends</option>
+              <option>Weekday evenings</option>
+              <option>Weekdays</option>
+              <option>Occasional events only</option>
+            </select>
+          </div>
+          <div class="field"><label for="v-msg">Anything else you'd like us to know? (optional)</label><textarea id="v-msg" name="message"></textarea></div>
+        </Form>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .h3 {
+    font-size: 1.3rem;
+  }
+  .way {
+    display: flex;
+    flex-direction: column;
+  }
+  .way p {
+    color: var(--muted);
+    font-size: 1rem;
+    flex: 1;
+  }
+  .link {
+    font-family: var(--font-head);
+    font-weight: 600;
+    color: var(--red-600);
+    text-decoration: none;
+  }
+</style>

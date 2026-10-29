@@ -1,0 +1,76 @@
+---
+/**
+ * Facebook Page timeline embed. Loads only once the visitor scrolls near it, so it doesn't
+ * slow the page down. Shows follow links until a Facebook page URL is set in config.
+ */
+import { site } from '../config';
+import SocialLinks from './SocialLinks.astro';
+
+const fb = site.social.facebook;
+const src = fb
+  ? `https://www.facebook.com/plugins/page.php?href=${encodeURIComponent(fb)}&tabs=timeline&width=500&height=600&small_header=true&adapt_container_width=true&hide_cover=false`
+  : '';
+---
+
+<div class="feed">
+  {
+    fb ? (
+      <iframe
+        data-src={src}
+        title="Latest posts from the MO-AJ Foundation on Facebook"
+        width="500"
+        height="600"
+        loading="lazy"
+        allow="encrypted-media"
+        class="js-lazy-feed"
+      />
+    ) : (
+      <div class="empty">
+        <p>Our social media feed will appear here once our pages are linked.</p>
+        <p class="notice">Setup: add the foundation's Facebook page URL in <code>src/config.ts</code>.</p>
+      </div>
+    )
+  }
+  <SocialLinks class="links" />
+</div>
+
+<script>
+  const frame = document.querySelector<HTMLIFrameElement>('.js-lazy-feed');
+  if (frame) {
+    const io = new IntersectionObserver((entries) => {
+      if (entries.some((e) => e.isIntersecting)) {
+        frame.src = frame.dataset.src!;
+        io.disconnect();
+      }
+    }, { rootMargin: '300px' });
+    io.observe(frame);
+  }
+</script>
+
+<style>
+  .feed {
+    display: grid;
+    gap: 16px;
+    justify-items: center;
+  }
+  iframe {
+    width: 100%;
+    max-width: 500px;
+    height: 600px;
+    border: 0;
+    border-radius: var(--radius);
+    background: #fff;
+  }
+  .empty {
+    width: 100%;
+    max-width: 500px;
+    padding: 32px;
+    border-radius: var(--radius);
+    background: #fff;
+    border: 1px solid var(--border);
+    text-align: center;
+  }
+  .links {
+    color: var(--navy);
+  }
+</style>
