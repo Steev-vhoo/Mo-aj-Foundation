@@ -20,7 +20,7 @@ const photos = await Promise.all(
         .replace(/\.\w+$/, '')
         .replace(/^\d+[-_ ]*/, '')
         .replace(/[-_]+/g, ' ')
-        .replace(/\bmo aj\b/gi, 'MO-AJ');
+        .replace(/\bmo aj( foundation)?\b/gi, (_, f) => (f ? 'MO-AJ Foundation' : 'MO-AJ'));
       const caption = name.charAt(0).toUpperCase() + name.slice(1);
       const large = await getImage({ src: mod.default, width: 1600 });
       return { src: mod.default, caption, large: large.src };

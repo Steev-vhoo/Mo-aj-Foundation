@@ -18,7 +18,7 @@ const teamFiles = import.meta.glob<{ default: ImageMetadata }>('../assets/team/*
 const groupPhotos = Object.entries(teamFiles)
   .sort(([a], [b]) => a.localeCompare(b))
   .map(([path, mod]) => {
-    const name = path.split('/').pop()!.replace(/\.\w+$/, '').replace(/^\d+[-_ ]*/, '').replace(/[-_]+/g, ' ').replace(/\bmo aj\b/gi, 'MO-AJ');
+    const name = path.split('/').pop()!.replace(/\.\w+$/, '').replace(/^\d+[-_ ]*/, '').replace(/[-_]+/g, ' ').replace(/\bmo aj( foundation)?\b/gi, (_, f) => (f ? 'MO-AJ Foundation' : 'MO-AJ'));
     return { src: mod.default, caption: name.charAt(0).toUpperCase() + name.slice(1) };
   });
 
@@ -116,9 +116,15 @@ const team = [
       <div class="grid grid--2 groups">
         {
           groupPhotos.length > 0
-            ? groupPhotos.map((g) => (
-                <figure class="panel-frame">
-                  <Photo src={g.src} alt={g.caption} ratio="3 / 2" position="center 30%" />
+            ? groupPhotos.map((g, i) => (
+                <figure class:list={['panel-frame', { 'is-feature': i === 0 && groupPhotos.length > 2 }]}>
+                  <Photo
+                    src={g.src}
+                    alt={g.caption}
+                    ratio={i === 0 && groupPhotos.length > 2 ? '16 / 9' : '3 / 2'}
+                    position="center 30%"
+                    eager={false}
+                  />
                   <figcaption>{g.caption}</figcaption>
                 </figure>
               ))
@@ -172,6 +178,10 @@ const team = [
   }
   .groups figure {
     margin: 0;
+  }
+  /* with three or more photos, the first one spans the full width */
+  .groups .is-feature {
+    grid-column: 1 / -1;
   }
   .groups figcaption {
     position: relative;
