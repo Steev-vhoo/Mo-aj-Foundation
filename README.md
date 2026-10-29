@@ -29,7 +29,8 @@ Every push to the main branch redeploys the site; pull requests get preview link
 | Stories | `src/content/stories/*.md` (copy `_TEMPLATE.md`) |
 | News posts | `src/content/news/*.md` (copy `_TEMPLATE.md`) |
 | Gallery photos | drop images into `src/assets/gallery/` (file name becomes the caption) |
-| Team members | `src/pages/about.astro` → `team` |
+| Team names and roles | `src/pages/about.astro` → `team` |
+| Team group photos | drop images into `src/assets/team/` (file name becomes the caption) |
 | Colours and fonts | `src/styles/global.css` (`:root` variables) |
 
 Stories only appear when `consentOnFile: true` and `draft` is not `true`. Do not publish a story without the family's written consent.
@@ -44,7 +45,7 @@ Stories only appear when `consentOnFile: true` and `draft` is not `true`. Do not
 
 - [ ] Real photos (hero, Mark, team, events). Each placeholder says what photo belongs there
 - [ ] High-resolution / vector logo (current logo was cut from a JPG)
-- [ ] Team names, roles and photos
+- [ ] Team names and roles, and group photos in `src/assets/team/`
 - [ ] Paystack payment page, MoMo and bank details
 - [ ] Form service endpoints
 - [ ] Social media links
