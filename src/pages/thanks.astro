@@ -1,0 +1,38 @@
+---
+import Base from '../layouts/Base.astro';
+import { site } from '../config';
+
+export const prerender = false;
+
+const error = Astro.url.searchParams.get('error');
+---
+
+<Base title={error ? 'Message not sent' : 'Thank you'}>
+  <section class="section">
+    <div class="container narrow">
+      {
+        error ? (
+          <>
+            <p class="eyebrow">Something went wrong</p>
+            <h1>We couldn't send your message</h1>
+            <p class="lead">
+              {error === 'unavailable'
+                ? 'Our online forms are not available right now.'
+                : 'Some details were missing or not quite right.'}{' '}
+              Please go back and try again, or email us at <a href={`mailto:${site.email}`}>{site.email}</a>.
+            </p>
+          </>
+        ) : (
+          <>
+            <p class="eyebrow">Thank you</p>
+            <h1>We've received your message</h1>
+            <p class="lead">A member of the MO-AJ Foundation team will be in touch soon.</p>
+          </>
+        )
+      }
+      <div class="btn-row">
+        <a href="/" class="btn btn--navy">Back to the home page</a>
+      </div>
+    </div>
+  </section>
+</Base>

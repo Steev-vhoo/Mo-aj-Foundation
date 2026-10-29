@@ -12,7 +12,7 @@ import { forms, site } from '../config';
   <section class="section">
     <div class="container contact-grid">
       <div class="card">
-        <Form endpoint={forms.contact} subject="Message from the MO-AJ Foundation website" submitLabel="Send message">
+        <Form endpoint={forms.contact} kind="contact" subject="Message from the MO-AJ Foundation website" submitLabel="Send message">
           <div class="form-row">
             <div class="field"><label for="c-name">Your name</label><input id="c-name" name="name" required autocomplete="name" /></div>
             <div class="field"><label for="c-email">Email</label><input id="c-email" name="email" type="email" required autocomplete="email" /></div>

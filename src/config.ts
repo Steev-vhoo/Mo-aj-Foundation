@@ -40,12 +40,12 @@ export const donate = {
 };
 
 /**
- * Form endpoints. Any service that accepts a standard form POST works (Formspree, Web3Forms,
- * Basin, ...). Until these are set, the forms fall back to opening an email to site.email.
+ * Form endpoints: the site's own API routes, which save to Supabase (see src/pages/api/).
+ * Until Supabase is configured, visitors are offered a pre-filled email instead.
  */
 export const forms = {
-  contact: '', // TODO: e.g. https://formspree.io/f/xxxxxxx
-  volunteer: '', // TODO
+  contact: '/api/message',
+  volunteer: '/api/volunteer',
 };
 
 export const nav = [

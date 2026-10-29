@@ -1,20 +1,23 @@
 ---
 /**
- * Posts to a form service (see `forms` in src/config.ts). When no endpoint is set yet,
- * the submission opens a pre-filled email to the foundation instead, so nothing is lost.
+ * Posts to the site's own API (src/pages/api/), which saves to Supabase and emails the foundation.
+ * If the database isn't set up yet, or a save fails, the visitor is offered a pre-filled email
+ * instead, so no message is lost. Without JavaScript the form posts normally and lands on /thanks.
  */
 import { site } from '../config';
 
 interface Props {
   endpoint: string;
   subject: string;
+  /** Tells /api/message whether this is the contact form or the share-a-story form */
+  kind?: 'contact' | 'story';
   submitLabel?: string;
 }
-const { endpoint, subject, submitLabel = 'Send' } = Astro.props;
+const { endpoint, subject, kind, submitLabel = 'Send' } = Astro.props;
 ---
 
-<form class="form js-form" method="post" action={endpoint || `mailto:${site.email}`} data-endpoint={endpoint} data-email={site.email} data-subject={subject}>
-  <input type="hidden" name="_subject" value={subject} />
+<form class="form js-form" method="post" action={endpoint} data-email={site.email} data-subject={subject}>
+  {kind && <input type="hidden" name="_form" value={kind} />}
   <label class="hp">Leave this empty <input type="text" name="_gotcha" tabindex="-1" autocomplete="off" /></label>
   <slot />
   <label class="check">
@@ -28,38 +31,43 @@ const { endpoint, subject, submitLabel = 'Send' } = Astro.props;
 </form>
 
 <script>
+  const emailFallback = (form: HTMLFormElement, data: FormData) => {
+    const lines: string[] = [];
+    for (const [key, value] of data) {
+      if (key.startsWith('_') || key === 'consent') continue;
+      lines.push(`${key}: ${value}`);
+    }
+    return `mailto:${form.dataset.email}?subject=${encodeURIComponent(form.dataset.subject ?? '')}&body=${encodeURIComponent(lines.join('\n'))}`;
+  };
+
   document.querySelectorAll<HTMLFormElement>('.js-form').forEach((form) => {
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
       const status = form.querySelector<HTMLElement>('.form-status')!;
       const button = form.querySelector<HTMLButtonElement>('button[type=submit]')!;
       const data = new FormData(form);
-      if (data.get('_gotcha')) return;
-      const endpoint = form.dataset.endpoint;
-
-      if (!endpoint) {
-        // No form service configured yet: hand over to the visitor's email app.
-        const lines: string[] = [];
-        for (const [key, value] of data) {
-          if (key.startsWith('_') || key === 'consent') continue;
-          lines.push(`${key}: ${value}`);
-        }
-        const href = `mailto:${form.dataset.email}?subject=${encodeURIComponent(form.dataset.subject ?? '')}&body=${encodeURIComponent(lines.join('\n'))}`;
-        window.location.href = href;
-        status.dataset.state = 'ok';
-        status.textContent = 'Your email app should open with your message ready to send.';
-        return;
-      }
 
       button.disabled = true;
       status.dataset.state = '';
       status.textContent = 'Sending…';
       try {
-        const res = await fetch(endpoint, { method: 'POST', body: data, headers: { Accept: 'application/json' } });
-        if (!res.ok) throw new Error(String(res.status));
-        form.reset();
-        status.dataset.state = 'ok';
-        status.textContent = 'Thank you. We have received your message and will be in touch soon.';
+        const res = await fetch(form.action, { method: 'POST', body: data, headers: { Accept: 'application/json' } });
+        const json = await res.json().catch(() => ({}));
+        if (res.ok && json.ok) {
+          form.reset();
+          status.dataset.state = 'ok';
+          status.textContent = 'Thank you. We have received your message and will be in touch soon.';
+        } else if (json.fallback) {
+          status.dataset.state = 'error';
+          status.innerHTML = '';
+          const link = document.createElement('a');
+          link.href = emailFallback(form, data);
+          link.textContent = 'send it by email instead';
+          status.append(`${json.error ?? 'We could not save your message.'} Please `, link, '.');
+        } else {
+          status.dataset.state = 'error';
+          status.textContent = json.error ?? 'Please check the form and try again.';
+        }
       } catch {
         status.dataset.state = 'error';
         status.textContent = `Sorry, something went wrong. Please email us at ${form.dataset.email}.`;

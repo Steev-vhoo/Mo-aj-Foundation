@@ -44,7 +44,7 @@ const stories = await getStories();
         can ask us to remove a story at any time.
       </p>
       <div class="card">
-        <Form endpoint={forms.contact} subject="Story submission - MO-AJ Foundation website" submitLabel="Send my story">
+        <Form endpoint={forms.contact} kind="story" subject="Story submission - MO-AJ Foundation website" submitLabel="Send my story">
           <div class="form-row">
             <div class="field"><label for="s-name">Your name</label><input id="s-name" name="name" required autocomplete="name" /></div>
             <div class="field"><label for="s-phone">Phone or WhatsApp</label><input id="s-phone" name="phone" type="tel" autocomplete="tel" /></div>

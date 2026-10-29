@@ -7,7 +7,8 @@ Static website for the Mark Ofosu-Ampadu Jnr (MO-AJ) Foundation, built with [Ast
 ```bash
 npm install
 npm run dev       # http://localhost:4321
-npm run build     # outputs the static site to dist/
+npm run build     # builds the site (static pages + Vercel functions for /api)
+cp .env.example .env   # optional: local settings for the forms/database
 ```
 
 ## Deploy to Vercel
@@ -24,7 +25,7 @@ Every push to the main branch redeploys the site; pull requests get preview link
 |---|---|
 | Email, phone, location, social links | `src/config.ts` → `site` |
 | Paystack link, MoMo and bank details | `src/config.ts` → `donate` |
-| Contact / volunteer form endpoints | `src/config.ts` → `forms` |
+| Form handling (saves to Supabase, emails alerts) | `src/pages/api/`, see [docs/DATABASE.md](docs/DATABASE.md) |
 | Menu | `src/config.ts` → `nav` |
 | Stories | `src/content/stories/*.md` (copy `_TEMPLATE.md`) |
 | News posts | `src/content/news/*.md` (copy `_TEMPLATE.md`) |
@@ -38,7 +39,7 @@ Stories only appear when `consentOnFile: true` and `draft` is not `true`. Do not
 ## Setting up services
 
 - **Donations (Paystack):** create a Paystack account for the foundation, then create a *Payment Page* (Paystack dashboard → Payment Pages). Copy its link into `donate.paystackUrl`. It accepts MoMo and cards with no server code.
-- **Forms:** create two forms in a form service such as [Formspree](https://formspree.io) or [Web3Forms](https://web3forms.com) and paste the endpoint URLs into `forms`. Until then, forms open a pre-filled email to the foundation.
+- **Database and forms:** follow [docs/DATABASE.md](docs/DATABASE.md) to create the Supabase tables and add the keys in Vercel. Until then, forms offer visitors a pre-filled email instead.
 - **Social feed:** put the Facebook page URL in `site.social.facebook`; the home page shows its timeline.
 
 ## Before launch (open items)
@@ -47,7 +48,8 @@ Stories only appear when `consentOnFile: true` and `draft` is not `true`. Do not
 - [ ] High-resolution / vector logo (current logo was cut from a JPG)
 - [ ] Team names and roles, and group photos in `src/assets/team/`
 - [ ] Paystack payment page, MoMo and bank details
-- [ ] Form service endpoints
+- [ ] Supabase tables created and keys added in Vercel ([docs/DATABASE.md](docs/DATABASE.md))
+- [ ] Resend account for email alerts
 - [ ] Social media links
 - [ ] Phone number and confirmed location
 - [ ] Confirm emergency numbers and advocacy priorities on the Road Safety page
