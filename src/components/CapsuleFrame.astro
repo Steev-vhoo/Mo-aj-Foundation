@@ -1,0 +1,124 @@
+---
+/**
+ * One photo seen through a stack of diagonal capsules, with floating accent dots.
+ * The capsules are an SVG clip path, so the photo stays a single optimised image.
+ */
+import { getImage } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+
+interface Props {
+  src: ImageMetadata;
+  alt: string;
+  /** SVG preserveAspectRatio alignment, to keep faces in the capsules */
+  align?: string;
+}
+const { src, alt, align = 'xMidYMid' } = Astro.props;
+const img = await getImage({ src, width: 1100, format: 'webp' });
+const id = `capsules-${Math.random().toString(36).slice(2, 8)}`;
+
+// Capsules in a rotated coordinate space centred on (0, 0): [x, y, width]. Height is fixed.
+const h = 128;
+const capsules = [
+  [-236, -206, 226],
+  [6, -206, 174],
+  [-292, -64, 204],
+  [-70, -64, 290],
+  [-214, 78, 236],
+  [40, 78, 166],
+];
+---
+
+<div class="capsule-frame">
+  <span class="dot dot--red" aria-hidden="true"></span>
+  <span class="dot dot--blue" aria-hidden="true"></span>
+  <span class="dot dot--navy" aria-hidden="true"></span>
+  <span class="ring" aria-hidden="true"></span>
+  <span class="blob" aria-hidden="true"></span>
+  <svg viewBox="0 0 640 640" role="img" aria-label={alt}>
+    <defs>
+      <clipPath id={id}>
+        {/* clipPath only accepts shapes, so each capsule carries the rotation itself */}
+        {capsules.map(([x, y, w]) => (
+          <rect x={x} y={y} width={w} height={h} rx={h / 2} transform="translate(320 320) rotate(-45)" />
+        ))}
+      </clipPath>
+    </defs>
+    <image href={img.src} width="640" height="640" preserveAspectRatio={`${align} slice`} clip-path={`url(#${id})`} />
+  </svg>
+</div>
+
+<style>
+  .capsule-frame {
+    position: relative;
+    width: 100%;
+    max-width: 560px;
+    aspect-ratio: 1;
+  }
+  svg {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: block;
+    overflow: visible;
+    filter: drop-shadow(0 18px 30px rgb(10 40 94 / 0.18));
+  }
+  .dot,
+  .ring,
+  .blob {
+    position: absolute;
+    border-radius: 50%;
+  }
+  .dot--red {
+    width: 18px;
+    height: 18px;
+    background: var(--red);
+    top: 44%;
+    right: 2%;
+    animation: float 6s ease-in-out infinite;
+  }
+  .dot--blue {
+    width: 14px;
+    height: 14px;
+    background: var(--sky);
+    bottom: 12%;
+    left: 4%;
+    animation: float 7s ease-in-out infinite reverse;
+  }
+  .dot--navy {
+    width: 10px;
+    height: 10px;
+    background: var(--navy);
+    top: 10%;
+    left: 14%;
+    animation: float 5s ease-in-out infinite;
+  }
+  .ring {
+    width: 26px;
+    height: 26px;
+    border: 3px solid var(--sky);
+    bottom: 4%;
+    right: 26%;
+  }
+  /* soft capsule echoing the logo's red dash, half off the edge */
+  .blob {
+    width: 64px;
+    height: 132px;
+    border-radius: 32px;
+    background: var(--red);
+    top: 2%;
+    right: -4%;
+    transform: rotate(35deg);
+  }
+  @media (max-width: 899px) {
+    .blob {
+      right: 0;
+      width: 44px;
+      height: 92px;
+    }
+  }
+  @keyframes float {
+    50% {
+      transform: translateY(-10px);
+    }
+  }
+</style>

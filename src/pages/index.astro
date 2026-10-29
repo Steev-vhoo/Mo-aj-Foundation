@@ -1,12 +1,16 @@
 ---
 import Base from '../layouts/Base.astro';
-import Photo from '../components/Photo.astro';
+import CapsuleFrame from '../components/CapsuleFrame.astro';
+import CircleCluster from '../components/CircleCluster.astro';
 import EntryCard from '../components/EntryCard.astro';
 import CtaBand from '../components/CtaBand.astro';
 import SocialFeed from '../components/SocialFeed.astro';
 import { getStories, getNews } from '../lib/content';
 import ribbonCutting from '../assets/gallery/01-ribbon-cutting-at-the-bus-shelter-unveiling.jpg';
 import busShelter from '../assets/gallery/03-the-mo-aj-foundation-bus-shelter.jpg';
+import tShirt from '../assets/gallery/05-wearing-the-mo-aj-foundation-colours.jpg';
+import ceremony from '../assets/gallery/04-friends-and-family-at-the-ceremony.jpg';
+import guests from '../assets/gallery/02-guests-gather-for-the-unveiling.jpg';
 
 const stories = (await getStories()).slice(0, 3);
 const news = (await getNews()).slice(0, 3);
@@ -47,12 +51,10 @@ const pillars = [
         </div>
       </div>
       <div class="hero-media">
-        <Photo
-          src={ribbonCutting}
-          alt="Family and supporters cut the ribbon at the unveiling of the MO-AJ Foundation bus shelter"
-          ratio="4 / 5"
-          position="62% center"
-          eager
+        <CapsuleFrame
+          src={guests}
+          align="xMinYMid"
+          alt="Family and supporters gather at the unveiling of the MO-AJ Foundation bus shelter, which carries Mark's portrait"
         />
         <div class="hero-quote">
           <p>"Our aim is to prevent others from suffering similar loss in their lives."</p>
@@ -90,11 +92,10 @@ const pillars = [
 
   <section class="section section--tint">
     <div class="container split">
-      <Photo
-        src={busShelter}
-        alt="Guests gather at the MO-AJ Foundation bus shelter, which carries Mark's portrait"
-        ratio="1 / 1"
-        position="38% center"
+      <CircleCluster
+        main={{ src: busShelter, alt: "Guests at the MO-AJ Foundation bus shelter, which carries Mark's portrait", position: '40% center' }}
+        top={{ src: ribbonCutting, alt: 'Family and supporters cut the ribbon at the bus shelter unveiling', position: '58% center' }}
+        bottom={{ src: tShirt, alt: "A supporter wearing a T-shirt printed with Mark's portrait", position: '58% center' }}
       />
       <div>
         <p class="eyebrow">Our story</p>
@@ -198,15 +199,19 @@ const pillars = [
       grid-template-columns: 1.2fr 1fr;
     }
   }
+  .hero {
+    overflow: hidden;
+  }
   .hero-media {
     position: relative;
-    max-width: 480px;
+    max-width: 540px;
     width: 100%;
     justify-self: center;
   }
   .hero-quote {
     position: relative;
-    margin: -48px 16px 0;
+    max-width: 340px;
+    margin: -64px 0 0 auto;
     background: #fff;
     border-radius: var(--radius);
     padding: 18px 22px;

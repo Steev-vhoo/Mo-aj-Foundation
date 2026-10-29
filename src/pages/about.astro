@@ -2,9 +2,12 @@
 import Base from '../layouts/Base.astro';
 import PageHeader from '../components/PageHeader.astro';
 import Photo from '../components/Photo.astro';
+import CircleCluster from '../components/CircleCluster.astro';
 import CtaBand from '../components/CtaBand.astro';
 import crowd from '../assets/gallery/02-guests-gather-for-the-unveiling.jpg';
 import tShirt from '../assets/gallery/05-wearing-the-mo-aj-foundation-colours.jpg';
+import busShelter from '../assets/gallery/03-the-mo-aj-foundation-bus-shelter.jpg';
+import ribbonCutting from '../assets/gallery/01-ribbon-cutting-at-the-bus-shelter-unveiling.jpg';
 
 const ideals = ['Community engagement', 'Educational excellence', 'Financial independence', 'Entrepreneurship', 'Leadership'];
 
@@ -34,13 +37,19 @@ const team = [
           infrastructure planning and decision-making at the highest levels of leadership.
         </p>
       </div>
-      <Photo src={crowd} alt="Family, friends and supporters gathered at a MO-AJ Foundation event" ratio="4 / 3" />
+      <div class="panel-frame">
+        <Photo src={crowd} alt="Family, friends and supporters gathered at a MO-AJ Foundation event" ratio="4 / 3" />
+      </div>
     </div>
   </section>
 
   <section class="section section--tint">
     <div class="container split">
-      <Photo src={tShirt} alt="A supporter wearing a MO-AJ Foundation T-shirt printed with Mark's portrait" ratio="1 / 1" position="62% center" />
+      <CircleCluster
+        main={{ src: tShirt, alt: "A supporter wearing a MO-AJ Foundation T-shirt printed with Mark's portrait", position: '60% center' }}
+        top={{ src: busShelter, alt: "The MO-AJ Foundation bus shelter with Mark's portrait", position: '40% center' }}
+        bottom={{ src: ribbonCutting, alt: 'Family and supporters cutting the ribbon', position: '55% center' }}
+      />
       <div>
         <p class="eyebrow">Why we exist</p>
         <h2>Remembering Mark</h2>

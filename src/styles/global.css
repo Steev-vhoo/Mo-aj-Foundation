@@ -10,6 +10,7 @@
   --red: #ff0600; /* logo red: accents only, never for text on white */
   --red-600: #d90a00; /* accessible red for buttons and links */
   --red-700: #b50800;
+  --sky: #3d9be9; /* balloon blue from events: decorative accents only */
 
   --bg: #fbfaf7;
   --surface: #ffffff;
@@ -310,6 +311,38 @@ a:hover {
 .skip-link:focus {
   top: 12px;
   color: #fff;
+}
+
+/* Large-radius photo over an offset tinted panel */
+.panel-frame {
+  position: relative;
+  padding: 0 0 22px 22px;
+}
+.panel-frame::before {
+  content: '';
+  position: absolute;
+  inset: 22px 22px 0 0;
+  border-radius: 36px;
+  background: var(--navy-50);
+  border: 1px solid var(--border);
+}
+.section--tint .panel-frame::before {
+  background: #fff;
+}
+.panel-frame::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 40%;
+  width: 6px;
+  height: 64px;
+  border-radius: 3px;
+  background: var(--red);
+}
+.panel-frame .photo {
+  position: relative;
+  border-radius: 36px;
+  box-shadow: var(--shadow);
 }
 
 /* Forms */
