@@ -9,7 +9,7 @@ const {
 } = Astro.props;
 ---
 
-<section class="section section--navy cta">
+<section class="section section--navy cta" data-reveal="trigger">
   <div class="container inner">
     <div>
       <h2>{title}</h2>
@@ -39,6 +39,15 @@ const {
     background: var(--red);
     opacity: 0.12;
     transform: translateY(-50%) rotate(-8deg);
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    :global(.js) .cta::before {
+      translate: 120% 0;
+      transition: translate 1.2s cubic-bezier(0.2, 0.75, 0.2, 1) 0.2s;
+    }
+    :global(.js) .cta.is-in::before {
+      translate: 0 0;
+    }
   }
   .inner {
     position: relative;

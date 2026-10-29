@@ -16,7 +16,9 @@ const formatted = date.toLocaleDateString('en-GB', { day: 'numeric', month: 'lon
 ---
 
 <article class="entry">
-  <Photo src={image} alt={imageAlt} ratio="16 / 10" label="Story photo" />
+  <div class="media">
+    <Photo src={image} alt={imageAlt} ratio="16 / 10" label="Story photo" />
+  </div>
   <div class="body">
     <p class="meta">
       {kicker && <span>{kicker} · </span>}<time datetime={date.toISOString()}>{formatted}</time>
@@ -36,16 +38,28 @@ const formatted = date.toLocaleDateString('en-GB', { day: 'numeric', month: 'lon
     border-radius: var(--radius);
     overflow: hidden;
     box-shadow: var(--shadow);
-    transition: transform 0.15s;
+    transition:
+      transform 0.25s,
+      box-shadow 0.25s;
   }
   .entry:hover {
-    transform: translateY(-3px);
+    transform: translateY(-4px);
+    box-shadow: 0 2px 4px rgb(10 40 94 / 0.06), 0 18px 40px rgb(10 40 94 / 0.14);
   }
   .entry {
     padding: 10px 10px 0;
   }
-  .entry :global(.photo) {
+  .media {
     border-radius: 18px 18px 34px 34px;
+    overflow: hidden;
+    isolation: isolate;
+  }
+  .media :global(.photo) {
+    border-radius: 0;
+    transition: transform 0.6s cubic-bezier(0.2, 0.7, 0.2, 1);
+  }
+  .entry:hover .media :global(.photo) {
+    transform: scale(1.06);
   }
   .body {
     padding: 18px 14px 24px;

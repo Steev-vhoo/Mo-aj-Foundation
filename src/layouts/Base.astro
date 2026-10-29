@@ -21,6 +21,7 @@ const ogImage = new URL(image, Astro.site);
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script is:inline>document.documentElement.classList.add('js');</script>
     <title>{pageTitle}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
@@ -55,5 +56,34 @@ const ogImage = new URL(image, Astro.site);
       <slot />
     </main>
     <Footer />
+    <script is:inline>
+      // Scroll reveal. Content is visible by default; hiding only happens when JS runs and the
+      // visitor hasn't asked for reduced motion (see global.css). Siblings get a stagger index.
+      (() => {
+        const sel = [
+          'main section:not(.hero) :is(.eyebrow, h2, .lead, .head-row, .btn-row, .notice)',
+          '.card', '.entry', '.panel-frame', '.capsule-frame', '.gallery li', '.names li',
+          '.ideals li', '.ticks li', '.steps li', '.amounts li', '.prose > *', '.split > div > p',
+        ].join(',');
+        const els = [...document.querySelectorAll(sel)].filter((el) => !el.closest('.hero, .site-footer, .lightbox'));
+        els.forEach((el) => {
+          if (!el.dataset.reveal) el.dataset.reveal = '';
+          const sibs = [...el.parentElement.children].filter((c) => els.includes(c));
+          el.style.setProperty('--d', String(Math.min(sibs.indexOf(el), 6)));
+        });
+        const targets = document.querySelectorAll('[data-reveal]');
+        if (!('IntersectionObserver' in window)) return targets.forEach((el) => el.classList.add('is-in'));
+        const io = new IntersectionObserver(
+          (entries) => entries.forEach((e) => {
+            if (e.isIntersecting) {
+              e.target.classList.add('is-in');
+              io.unobserve(e.target);
+            }
+          }),
+          { rootMargin: '0px 0px -8% 0px', threshold: 0.12 },
+        );
+        targets.forEach((el) => io.observe(el));
+      })();
+    </script>
   </body>
 </html>

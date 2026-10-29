@@ -313,6 +313,108 @@ a:hover {
   color: #fff;
 }
 
+/* ---------- Motion ---------- */
+/* Everything here only runs for visitors who haven't asked their device for reduced motion. */
+@media (prefers-reduced-motion: no-preference) {
+  /* page intros animate on load */
+  .hero-copy > *,
+  .page-header .container > * {
+    animation: rise 0.8s cubic-bezier(0.2, 0.75, 0.2, 1) both;
+  }
+  .hero-copy > :nth-child(2),
+  .page-header .container > :nth-child(2) {
+    animation-delay: 0.1s;
+  }
+  .hero-copy > :nth-child(3),
+  .page-header .container > :nth-child(3) {
+    animation-delay: 0.2s;
+  }
+  .hero-copy > :nth-child(4) {
+    animation-delay: 0.3s;
+  }
+  .hero-copy .eyebrow::before,
+  .page-header .eyebrow::before {
+    animation: dash 0.7s cubic-bezier(0.2, 0.75, 0.2, 1) 0.3s both;
+  }
+
+  /* scroll reveal (elements are tagged by the script in the Base layout) */
+  .js [data-reveal]:not([data-reveal='trigger']) {
+    opacity: 0;
+    translate: 0 26px;
+    transition:
+      opacity 0.7s ease,
+      translate 0.8s cubic-bezier(0.2, 0.75, 0.2, 1);
+    transition-delay: calc(var(--d, 0) * 90ms);
+  }
+  .js [data-reveal].is-in {
+    opacity: 1;
+    translate: 0 0;
+  }
+  /* cards keep their hover lift alongside the reveal */
+  .js :is(.card, .entry)[data-reveal] {
+    transition:
+      opacity 0.7s ease calc(var(--d, 0) * 90ms),
+      translate 0.8s cubic-bezier(0.2, 0.75, 0.2, 1) calc(var(--d, 0) * 90ms),
+      transform 0.25s,
+      box-shadow 0.25s;
+  }
+  .hero-quote {
+    animation: rise 0.8s cubic-bezier(0.2, 0.75, 0.2, 1) 1.1s both;
+  }
+  /* eyebrow dash draws in */
+  .js .eyebrow[data-reveal]::before {
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.6s cubic-bezier(0.2, 0.75, 0.2, 1) 0.25s;
+  }
+  .js .eyebrow[data-reveal].is-in::before {
+    transform: none;
+  }
+  /* panel frame: the tinted panel slides into its offset and the red bar grows */
+  .js .panel-frame[data-reveal]::before {
+    translate: -22px 22px;
+    transition: translate 0.9s cubic-bezier(0.2, 0.75, 0.2, 1) 0.25s;
+  }
+  .js .panel-frame[data-reveal]::after {
+    transform: scaleY(0);
+    transition: transform 0.6s cubic-bezier(0.2, 0.75, 0.2, 1) 0.7s;
+  }
+  .js .panel-frame[data-reveal].is-in::before {
+    translate: 0 0;
+  }
+  .js .panel-frame[data-reveal].is-in::after {
+    transform: none;
+  }
+  .panel-frame .photo {
+    transition: transform 0.6s cubic-bezier(0.2, 0.75, 0.2, 1);
+  }
+  .panel-frame:hover .photo {
+    transform: translate(4px, -4px);
+  }
+  /* gallery tiles and cards lift a little on hover */
+  .card {
+    transition:
+      transform 0.25s,
+      box-shadow 0.25s;
+  }
+  a.card:hover,
+  .card:has(a:hover) {
+    transform: translateY(-4px);
+  }
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+}
+@keyframes dash {
+  from {
+    transform: scaleX(0);
+  }
+}
+
 /* Large-radius photo over an offset tinted panel */
 .panel-frame {
   position: relative;

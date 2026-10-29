@@ -35,6 +35,9 @@ const isActive = (href: string) => path === href || path.startsWith(href + '/');
 <script>
   const toggle = document.querySelector<HTMLButtonElement>('.menu-toggle');
   const header = document.querySelector('.site-header');
+  const onScroll = () => header?.classList.toggle('is-scrolled', window.scrollY > 8);
+  window.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
   toggle?.addEventListener('click', () => {
     const open = toggle.getAttribute('aria-expanded') === 'true';
     toggle.setAttribute('aria-expanded', String(!open));
@@ -50,6 +53,10 @@ const isActive = (href: string) => path === href || path.startsWith(href + '/');
     z-index: 50;
     background: #fff;
     border-bottom: 1px solid var(--border);
+    transition: box-shadow 0.3s;
+  }
+  .site-header.is-scrolled {
+    box-shadow: 0 6px 24px rgb(10 40 94 / 0.08);
   }
   .bar {
     display: flex;
